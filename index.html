@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff7a59">
+<title>주원이의 일본 TRIP</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff6ec;--card:#fff;--ink:#2b2b3a;--mute:#8b8798;--pri:#ff7a59;--pri-d:#dd5a3c;--blue:#3d8bfd;--green:#21b36b;--gold:#ffb703;--red:#ef476f;--line:#f1e2d3;--soft:#fff0e3}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Jua','Noto Sans JP',sans-serif;font-size:17px}
+button{font-family:inherit;color:inherit;cursor:pointer}
+input,textarea{font-family:inherit;font-size:17px}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 96px}
+.jp{font-family:'Noto Sans JP',sans-serif;font-weight:700}
+.mute{color:var(--mute)}
+.small{font-size:14px}
+.loading{text-align:center;padding:40vh 0;font-size:22px}
+.hero{background:linear-gradient(135deg,#ff7a59,#ffb36b);color:#fff;border-radius:22px;padding:18px 18px 14px;box-shadow:0 5px 0 #f0b48f;margin-bottom:14px}
+.hero h1{margin:0;font-size:28px;line-height:1.2}
+.hero p{margin:4px 0 12px;opacity:.95}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:#ffffff33;border-radius:999px;padding:5px 11px;font-size:14px}
+.chip.dark{background:var(--soft);color:var(--ink)}
+.sec-title{font-size:19px;margin:16px 4px 8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:var(--card);border-radius:18px;padding:14px;box-shadow:0 4px 0 var(--line);margin-bottom:12px}
+.city{background:var(--card);border:0;border-radius:18px;padding:14px 12px;text-align:left;box-shadow:0 4px 0 var(--line)}
+.city .em{font-size:34px}
+.city b{display:block;font-size:20px;margin-top:2px}
+.city small{display:block;color:var(--mute);font-size:13px;line-height:1.3;margin-top:2px}
+.city .pg{margin-top:8px;font-size:13px;color:var(--pri-d)}
+.city:active,.btn:active,.opt:active,.tile:active,.coin:active,.city:active{transform:translateY(3px);box-shadow:none}
+.btn{display:inline-block;background:var(--pri);color:#fff;border:0;border-radius:14px;padding:12px 18px;font-size:17px;box-shadow:0 4px 0 var(--pri-d)}
+.btn.blue{background:var(--blue);box-shadow:0 4px 0 #2a63c0}
+.btn.green{background:var(--green);box-shadow:0 4px 0 #168250}
+.btn.sec{background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--line);border:1px solid var(--line)}
+.btn.wide{display:block;width:100%;margin-top:10px}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.end{justify-content:flex-end}
+.spacer{flex:1}
+.top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ib{background:#fff;border:1px solid var(--line);border-radius:12px;min-width:40px;height:40px;font-size:17px;padding:0 10px}
+.bar{flex:1;height:12px;background:#f3e3d4;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#ff9a6b,var(--pri));border-radius:99px;transition:width .3s}
+.place{background:#fff;border-radius:18px;padding:14px;box-shadow:0 4px 0 var(--line);margin-bottom:12px}
+.place h3{margin:0;font-size:20px}
+.place .meta{color:var(--mute);font-size:14px;margin:2px 0 8px}
+.scene{display:flex;align-items:center;gap:10px;width:100%;background:var(--soft);border:0;border-radius:14px;padding:11px 12px;margin-top:8px;text-align:left;font-size:16px}
+.scene .st{margin-left:auto;color:var(--gold);letter-spacing:1px;white-space:nowrap}
+.scene.lock{opacity:.5}
+.link{color:var(--blue);text-decoration:none;font-size:14px}
+.log{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.bubble{max-width:88%;border-radius:18px;padding:10px 13px;box-shadow:0 3px 0 var(--line)}
+.bubble.npc{background:#fff;border-bottom-left-radius:5px}
+.bubble.me{background:#d9efff;margin-left:auto;border-bottom-right-radius:5px;box-shadow:0 3px 0 #b9dcf5}
+.bubble.react{background:#fff3f5}
+.bubble .who{font-size:13px;color:var(--mute);margin-bottom:3px}
+.bubble .ja{font-size:20px;line-height:1.5}
+.bubble .ko{font-size:14px;color:var(--mute);margin-top:3px}
+.bubble .tools{display:flex;gap:6px;margin-top:6px}
+.mini{background:var(--soft);border:0;border-radius:10px;padding:5px 10px;font-size:14px}
+.ctrl{background:#fff;border-radius:18px;padding:14px;box-shadow:0 4px 0 var(--line)}
+.prompt{font-size:16px;color:var(--pri-d);margin-bottom:8px}
+.say{font-size:22px;margin:4px 0 10px}
+.opt{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:11px 12px;font-size:18px;margin:8px 0;box-shadow:0 3px 0 var(--line)}
+.opt .t{flex:1}
+.opt.ok{border-color:var(--green);background:#e7fbf0}
+.opt.bad{border-color:var(--red);background:#ffeef2}
+.slot{min-height:58px;background:#fff8f1;border:2px dashed #f0c4a2;border-radius:14px;padding:5px;margin-bottom:10px}
+.tile{display:inline-block;background:#fff;border:2px solid #f0d6c0;border-bottom-width:5px;border-radius:11px;padding:7px 12px;margin:4px;font-size:19px}
+.tile.used{visibility:hidden}
+.answer{background:#e7fbf0;border-radius:12px;padding:8px 10px;margin:6px 0 10px;font-size:15px}
+.menu{background:#3a2b22;color:#fff7ea;border-radius:16px;padding:12px}
+.menu h4{margin:0 0 8px;text-align:center;letter-spacing:2px}
+.mi{display:flex;justify-content:space-between;width:100%;background:transparent;border:2px solid #ffffff22;color:#fff7ea;border-radius:12px;padding:10px 12px;margin:6px 0;font-size:18px}
+.mi.on{background:#ffb70333;border-color:var(--gold)}
+.coins{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.coin{width:64px;height:64px;border-radius:50%;border:0;font-size:15px;box-shadow:0 4px 0 #0002;display:flex;align-items:center;justify-content:center}
+.coin.c1000{width:96px;border-radius:10px;background:#bfe3d0}
+.coin.c500{background:#f3d27a}.coin.c100,.coin.c50{background:#dadde3}.coin.c10{background:#d99a6c}.coin.c5{background:#f0cf6a}.coin.c1{background:#eef0f3;width:54px;height:54px}
+.tray{text-align:center;font-size:26px;margin:6px 0}
+.big-stars{font-size:46px;color:var(--gold);text-align:center;letter-spacing:4px}
+.center{text-align:center}
+.reward{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:12px;padding:9px 12px;margin:6px 0}
+.reward .e{font-size:28px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+.nav button{flex:1;max-width:104px;background:none;border:0;padding:8px 0 9px;font-size:12px;color:var(--mute)}
+.nav button b{display:block;font-size:22px;font-weight:normal}
+.nav button.on{color:var(--pri-d)}
+.stamp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stamp{background:var(--soft);border-radius:14px;padding:8px 4px;text-align:center;font-size:12px}
+.stamp .e{font-size:30px;display:block}
+.stamp.off .e{filter:grayscale(1);opacity:.3}
+.item-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 2px;text-align:center;font-size:12px}
+.item .e{font-size:28px;display:block}
+.money-big{font-size:34px;color:var(--pri-d)}
+.lg{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.lg:last-child{border-bottom:0}
+.warn{background:#fff3cd;border-radius:10px;padding:8px 10px;font-size:13px;margin:4px 0}
+.pin{letter-spacing:10px;text-align:center;font-size:26px;width:180px;padding:8px;border:2px solid var(--line);border-radius:12px}
+textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:12px;padding:8px;font-size:12px}
+.face{font-size:26px}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">✈️ 불러오는 중…</div></div>
+<script src="data.js"></script>
+<script>
+'use strict';
+/* ========== 기본 도구 ========== */
+const app=document.getElementById('app');
+const PK='kotoba-trip-v1', CK='kotoba-trip-sheet-cache';
+function h(tag,attrs,...kids){const e=document.createElement(tag);attrs=attrs||{};for(const k in attrs){const v=attrs[k];if(v==null||v===false)continue;if(k==='class')e.className=v;else if(k==='style')e.style.cssText=v;else if(k.startsWith('on'))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v===true?'':v)}for(const c of kids.flat(3)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e}
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const sample=(a,n)=>shuffle(a).slice(0,n);
+const splitP=s=>String(s||'').split('|').map(x=>x.trim()).filter(Boolean);
+const num=v=>{const n=parseFloat(String(v??'').replace(/[^0-9.\-]/g,''));return isNaN(n)?0:n};
+const on=v=>String(v??'Y').trim().toUpperCase()!=='N';
+const won=n=>Number(n||0).toLocaleString('ko-KR')+'원';
+const pad=n=>String(n).padStart(2,'0');
+const ds=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>ds(new Date());
+function weekKey(s){const d=s?new Date(s+'T00:00:00'):new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return ds(d)}
+const monthKey=s=>(s||today()).slice(0,7);
+const monthLabel=m=>m.slice(0,4)+'년 '+Number(m.slice(5,7))+'월';
+let toastT=null;
+function toast(m,ms){let el=document.getElementById('toast');if(!el){el=document.createElement('div');el.id='toast';el.style.cssText='position:fixed;left:50%;bottom:86px;transform:translateX(-50%);max-width:90%;background:#000c;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:9;text-align:center';document.body.append(el)}el.textContent=m;el.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>{el.style.display='none'},ms||3000)}
+function show(node,nav){app.replaceChildren(node);if(nav)app.append(navBar(nav));window.scrollTo(0,0)}
+
+/* ========== 소리 (브라우저 음성합성) ========== */
+let JV=null;
+function pickVoice(){try{JV=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('ja'))||null}catch(e){}return JV}
+try{speechSynthesis.onvoiceschanged=pickVoice;pickVoice()}catch(e){}
+const TTSERR={'language-unavailable':'일본어 음성이 없어요. 폰 설정의 TTS에서 일본어를 설치해 주세요','not-allowed':'브라우저가 소리를 막았어요. 🔊 버튼을 직접 눌러 보세요','synthesis-failed':'음성 엔진 오류예요. Google 음성 서비스를 업데이트해 주세요','synthesis-unavailable':'음성 엔진이 없어요','network':'일본어 음성에 인터넷 연결이 필요해요','audio-busy':'다른 앱이 소리를 쓰는 중이에요'};
+function speak(t,rate){return new Promise(res=>{
+ let done=false;const fin=()=>{if(!done){done=true;res()}};
+ if(typeof speechSynthesis==='undefined'||typeof SpeechSynthesisUtterance==='undefined'){toast('이 브라우저는 음성 재생을 지원하지 않아요');return fin()}
+ const go=useV=>{try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=rate||baseRate();const v=useV?(JV||pickVoice()):null;if(v)u.voice=v;
+  u.onend=fin;u.onerror=e=>{const c=e.error||'unknown';if(c==='interrupted'||c==='canceled')return fin();if(useV&&v)return go(false);toast((TTSERR[c]||'소리 재생에 실패했어요')+' ('+c+')',6000);fin()};
+  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast('소리 재생에 실패했어요');fin()}};
+ go(true);setTimeout(fin,Math.min(9000,1500+String(t).length*200));
+})}
+const baseRate=()=>{const r=D?num(D.S['말속도']):0;return r>0.3&&r<2?r:0.85};
+
+/* ========== 저장 (기기 브라우저) ========== */
+const blankP=()=>({scenes:{},items:{},days:{},ledger:[],weekBonus:{},flags:{newm:{},star3:{},boss:{},pack:{}},words:{},payouts:[],pin:null,koShow:null});
+function loadP(){try{const p=Object.assign(blankP(),JSON.parse(localStorage.getItem(PK)||'{}'));p.flags=Object.assign(blankP().flags,p.flags||{});return p}catch(e){return blankP()}}
+let P=loadP();
+function saveP(){try{localStorage.setItem(PK,JSON.stringify(P))}catch(e){toast('저장 공간이 부족해요')}}
+
+/* ========== 데이터 (구글 시트 → 기기 저장본 → 기본값) ========== */
+let D=null;
+function parseCSV(t){t=String(t).replace(/^\uFEFF/,'');const rows=[];let row=[],f='',q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else{if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'){row.push(f);rows.push(row);row=[];f=''}else if(c!=='\r')f+=c}}if(f!==''||row.length){row.push(f);rows.push(row)}return rows}
+function rowsToObj(rows){if(!rows||!rows.length)return[];const hd=rows[0].map(x=>String(x??'').trim());return rows.slice(1).filter(r=>r.some(c=>String(c??'').trim()!=='')).map(r=>{const o={};hd.forEach((k,i)=>{if(k)o[k]=String(r[i]??'').trim()});return o})}
+async function fetchT(url,ms){const ac=new AbortController();const t=setTimeout(()=>ac.abort(),ms);try{return await fetch(url,{signal:ac.signal,cache:'no-store'})}finally{clearTimeout(t)}}
+async function loadData(){
+ const warn=[];let raw=null,src='기본 내장 데이터';const cfg=window.SHEET_CONFIG||{};const DEF=window.DEFAULT_DATA||{};
+ if(cfg.pub&&cfg.gids&&Object.keys(cfg.gids).length){
+  try{const tabs=Object.keys(cfg.gids);
+   const get=t=>fetchT(cfg.pub+'?gid='+cfg.gids[t]+'&single=true&output=csv&_='+Date.now(),8000).then(r=>{if(!r.ok)throw new Error(t+' 탭 '+r.status);return r.text()});
+   const texts=[];for(let i=0;i<tabs.length;i+=3){const part=await Promise.all(tabs.slice(i,i+3).map(get));texts.push(...part)}
+   raw={};tabs.forEach((t,i)=>{const rows=parseCSV(texts[i]);if(/^\s*<!DOCTYPE|<html/i.test(texts[i]))throw new Error(t+' 탭이 웹에 게시되지 않았어요');raw[t]=rows});
+   src='구글 시트';try{localStorage.setItem(CK,JSON.stringify({at:Date.now(),raw}))}catch(e){}
+  }catch(e){warn.push('시트를 못 불러왔어요: '+(e.name==='AbortError'?'시간 초과':e.message));raw=null;
+   try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c&&c.raw){raw=c.raw;src='기기 저장본 ('+new Date(c.at).toLocaleString('ko-KR')+')'}}catch(e2){}}
+ }
+ raw=raw||{};for(const k in DEF){if(!raw[k]||raw[k].length<1){raw[k]=DEF[k];if(src==='구글 시트')warn.push(k+' 탭이 비어 있어서 기본값을 썼어요')}}
+ return build(raw,src,warn);
+}
+const NPC_T=['말','전화'],ME_T=['고르기','타일','빈칸','말하기','메뉴','돈내기'];
+const byOrder=(a,b)=>num(a['순서'])-num(b['순서']);
+function build(raw,src,warn){
+ const T=k=>rowsToObj(raw[k]);
+ const S={};T('설정').forEach(r=>{if(r['키'])S[r['키']]=r['값']||''});
+ const cities=T('도시').filter(r=>r['도시ID']&&on(r['사용'])).sort(byOrder);
+ const places=T('장소').filter(r=>r['장소ID']&&on(r['사용'])).sort(byOrder);
+ const scenes=T('장면').filter(r=>r['장면ID']&&on(r['사용'])).sort(byOrder);
+ const lines={};T('대화').forEach(r=>{const id=r['장면ID'];if(id)(lines[id]=lines[id]||[]).push(r)});
+ const words={};T('단어').forEach(r=>{if(r['장면ID']&&r['일본어'])(words[r['장면ID']]=words[r['장면ID']]||[]).push(r)});
+ const chars={};T('캐릭터').forEach(r=>{if(r['캐릭터ID'])chars[r['캐릭터ID']]=r});
+ const items=T('아이템').filter(r=>r['아이템ID']&&r['장면ID']);
+ const rules={};T('용돈규칙').forEach(r=>{if(r['규칙키'])rules[r['규칙키']]={key:r['규칙키'],name:r['이름']||r['규칙키'],amt:num(r['금액']),desc:r['설명']||'',on:on(r['사용'])}});
+ const cIds=new Set(cities.map(c=>c['도시ID'])),pIds=new Set(places.map(p=>p['장소ID'])),sIds=new Set(scenes.map(s=>s['장면ID']));
+ places.forEach(p=>{if(!cIds.has(p['도시ID']))warn.push('장소 '+p['장소ID']+': 도시ID "'+p['도시ID']+'"가 도시 탭에 없어요')});
+ scenes.forEach(s=>{if(!pIds.has(s['장소ID']))warn.push('장면 '+s['장면ID']+': 장소ID "'+s['장소ID']+'"가 장소 탭에 없어요');if(!lines[s['장면ID']])warn.push('장면 '+s['장면ID']+': 대화 줄이 없어요')});
+ for(const id in lines){
+  if(!sIds.has(id)){warn.push('대화: 장면ID "'+id+'"가 장면 탭에 없어요 (또는 사용 N)');delete lines[id];continue}
+  lines[id]=lines[id].filter(r=>{const who=r['누가'],ty=r['형태'],tag='대화 '+id+' '+r['순서']+'번';
+   if(who==='점원'){if(!NPC_T.includes(ty)){warn.push(tag+': 점원 형태 "'+ty+'"를 몰라요 (말/전화)');return false}if(!r['일본어']){warn.push(tag+': 일본어가 비어 있어요');return false}return true}
+   if(who!=='나'){warn.push(tag+': 누가 칸은 점원 또는 나');return false}
+   if(!ME_T.includes(ty)){warn.push(tag+': 형태 "'+ty+'"를 몰라요');return false}
+   const opts=splitP(r['보기']);
+   if(ty==='고르기'&&(!opts.length||!opts.includes(String(r['정답']).trim()))){warn.push(tag+': 정답이 보기 안에 없어요');return false}
+   if(ty==='빈칸'&&!/\[.+?\]/.test(r['일본어'])){warn.push(tag+': 빈칸 [ ] 표시가 없어요');return false}
+   if((ty==='타일'||ty==='말하기')&&!r['일본어']){warn.push(tag+': 일본어가 비어 있어요');return false}
+   if(ty==='돈내기'&&!(num(r['정답'])>0)){warn.push(tag+': 정답에 금액 숫자를 넣어 주세요');return false}
+   if(ty==='메뉴'){const names=opts.map(o=>o.split(':')[0].trim()),ans=splitP(r['정답']);if(!ans.length||ans.some(a=>!names.includes(a))){warn.push(tag+': 메뉴 정답이 보기에 없어요');return false}}
+   return true});
+ }
+ return {S,cities,places,scenes,lines,words,chars,items,rules,src,warn,at:Date.now()};
+}
+/* 데이터 조회 */
+const realMode=()=>String(D.S['이름모드']||'실제').trim()!=='가상';
+const pName=p=>p?(realMode()?p['이름_실제']:(p['이름_가상']||p['이름_실제'])):'';
+const pJP=p=>p?(realMode()?p['일본어_실제']:(p['일본어_가상']||p['일본어_실제'])):'';
+function fill(t,p,lang){const S=D.S,ja=lang==='ja';return String(t||'').replace(/\{가게\}/g,ja?pJP(p):pName(p)).replace(/\{풀네임\}/g,ja?(S['풀네임_일본어']||''):(S['풀네임']||'')).replace(/\{이름\}/g,ja?(S['플레이어이름_일본어']||''):(S['플레이어이름']||''))}
+const placeById=id=>D.places.find(p=>p['장소ID']===id);
+const sceneById=id=>D.scenes.find(s=>s['장면ID']===id);
+const placesOf=cid=>D.places.filter(p=>p['도시ID']===cid);
+const scenesOf=pid=>D.scenes.filter(s=>s['장소ID']===pid&&D.lines[s['장면ID']]&&D.lines[s['장면ID']].length);
+const charOf=p=>D.chars[p&&p['캐릭터ID']]||{이름:'てんいん',이모지:'🧑',말속도:'1'};
+const cleared=id=>!!P.scenes[id];
+const isBoss=s=>String(s['보스']).trim().toUpperCase()==='Y';
+const bossLocked=s=>isBoss(s)&&scenesOf(s['장소ID']).some(x=>!isBoss(x)&&!cleared(x['장면ID']));
+const starStr=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+const koShow=()=>P.koShow==null?String(D.S['한국어뜻']||'보이기')!=='숨기기':P.koShow;
+const rule=k=>D.rules[k]||{amt:0,on:false,name:k};
+
+/* ========== 용돈 ========== */
+let capHit=false;
+function award(key,label){const ru=rule(key);if(!ru.on||!(ru.amt>0))return 0;const wk=weekKey();const cr=rule('주상한');const cap=cr.on&&cr.amt>0?cr.amt:Infinity;
+ const used=P.ledger.filter(e=>e.w===wk).reduce((a,e)=>a+e.amt,0);const g=Math.min(ru.amt,cap-used);if(g<ru.amt)capHit=true;if(g<=0)return 0;
+ P.ledger.push({d:today(),w:wk,m:monthKey(),k:key,label,amt:g,paid:null});return g}
+function markPlayDay(out){P.days[today()]=1;const wk=weekKey();const n=Object.keys(P.days).filter(d=>weekKey(d)===wk).length;const need=num(rule('주간개근일수').amt)||4;
+ if(n>=need&&!P.weekBonus[wk]&&rule('주간개근').on){P.weekBonus[wk]=1;const g=award('주간개근',rule('주간개근').name+' ('+need+'일)');if(g>0&&out)out.push({label:rule('주간개근').name,amt:g})}}
+const weekDays=()=>{const wk=weekKey();return Object.keys(P.days).filter(d=>weekKey(d)===wk).length};
+const monthSum=m=>P.ledger.filter(e=>e.m===m&&!e.paid).reduce((a,e)=>a+e.amt,0);
+const weekSum=()=>{const wk=weekKey();return P.ledger.filter(e=>e.w===wk).reduce((a,e)=>a+e.amt,0)};
+
+/* ========== 하단 메뉴 ========== */
+function navBar(cur){const it=[['home','🗾','도시'],['review','📖','복습'],['passport','🛂','여권'],['money','💰','용돈'],['dad','⚙️','아빠']];
+ return h('div',{class:'nav'},it.map(([k,e,t])=>h('button',{class:cur===k?'on':'',onclick:()=>route(k)},h('b',{},e),t)))}
+function route(k){speechSynthesis&&speechSynthesis.cancel&&speechSynthesis.cancel();({home:homeView,review:reviewStart,passport:passportView,money:moneyView,dad:dadGate})[k]()}
+
+/* ========== 홈: 도시 고르기 ========== */
+function homeView(){
+ const S=D.S;document.title=S['앱이름']||'주원이의 일본 TRIP';
+ const total=D.scenes.filter(s=>D.lines[s['장면ID']]).length,done=Object.keys(P.scenes).filter(id=>sceneById(id)).length;
+ const need=num(rule('주간개근일수').amt)||4;
+ show(h('div',{class:'wrap'},
+  h('div',{class:'hero'},h('h1',{},'✈️ '+(S['앱이름']||'주원이의 일본 TRIP')),h('p',{},S['부제']||''),
+   h('div',{class:'chips'},h('span',{class:'chip'},'🛂 도장 '+done+'/'+total),h('span',{class:'chip'},'💰 이번 달 '+won(monthSum(monthKey()))),h('span',{class:'chip'},'🔥 이번 주 '+weekDays()+'/'+need+'일'))),
+  h('div',{class:'sec-title'},'어느 도시로 떠나 볼까?'),
+  h('div',{class:'grid'},D.cities.map(c=>{const ss=placesOf(c['도시ID']).flatMap(p=>scenesOf(p['장소ID']));const dn=ss.filter(s=>cleared(s['장면ID'])).length;
+   return h('button',{class:'city',onclick:()=>cityView(c['도시ID'])},h('div',{class:'em'},c['이모지']),h('b',{},c['이름']),h('small',{class:'jp'},c['일본어']),h('small',{},c['설명']),h('div',{class:'pg'},ss.length?('미션 '+dn+'/'+ss.length):'준비 중'))}))
+ ),'home')}
+
+/* ========== 도시: 장소와 미션 고르기 ========== */
+function streetLink(p){const m=String(p['거리좌표']||'').match(/(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);if(!m)return null;
+ return h('a',{class:'link',target:'_blank',rel:'noopener',href:'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+m[1]+','+m[2]},'🗺 진짜 거리 보기')}
+function cityView(cid){const c=D.cities.find(x=>x['도시ID']===cid);if(!c)return homeView();
+ show(h('div',{class:'wrap'},
+  h('div',{class:'top'},h('button',{class:'ib',onclick:homeView},'←'),h('b',{style:'font-size:22px'},c['이모지']+' '+c['이름']),h('span',{class:'jp mute'},c['일본어'])),
+  placesOf(cid).map(p=>{const ch=charOf(p),ss=scenesOf(p['장소ID']);
+   return h('div',{class:'place'},
+    h('div',{class:'row'},h('span',{style:'font-size:30px'},p['이모지']),h('div',{},h('h3',{},pName(p)),h('div',{class:'meta'},p['분류']+' · '+ch['이모지']+' '+ch['이름']))),
+    h('div',{class:'row'},h('span',{class:'small mute'},p['설명']||''),h('span',{class:'spacer'}),streetLink(p)),
+    ss.length?ss.map(s=>{const lk=bossLocked(s),b=(P.scenes[s['장면ID']]||{}).best||0;
+     return h('button',{class:'scene'+(lk?' lock':''),onclick:()=>lk?toast('이 장소의 다른 미션을 먼저 깨면 열려요'):introView(s['장면ID'])},
+      h('span',{},lk?'🔒':(isBoss(s)?'👑':s['도장']||'💬')),h('span',{},fill(s['제목'],p,'ko')),h('span',{class:'st'},b?starStr(b):(isBoss(s)?'보스':'NEW')))})
+    :h('div',{class:'scene',style:'opacity:.6'},'🚧 준비 중이에요 (시트에 대화를 넣으면 열려요)'))}))
+ ,'home')}
+
+/* ========== 미션 시작 전: 미션·문법·단어 ========== */
+function introView(id){const s=sceneById(id),p=placeById(s['장소ID']),ch=charOf(p),ws=D.words[id]||[];
+ show(h('div',{class:'wrap'},
+  h('div',{class:'top'},h('button',{class:'ib',onclick:()=>cityView(p['도시ID'])},'←'),h('b',{},p['이모지']+' '+pName(p))),
+  h('div',{class:'card'},h('div',{class:'small mute'},isBoss(s)?'👑 보스 미션':'🎯 미션'),h('div',{style:'font-size:21px;margin:4px 0'},fill(s['제목'],p,'ko')),h('div',{},fill(s['미션'],p,'ko')),
+   h('div',{class:'small mute',style:'margin-top:8px'},'만날 사람: '+ch['이모지']+' '+ch['이름']+' · '+(ch['성격']||''))),
+  s['문법']?h('div',{class:'card'},h('div',{class:'small mute'},'📐 오늘의 문법'),h('div',{class:'jp',style:'font-size:22px;margin:4px 0'},s['문법']),h('div',{class:'small'},s['문법설명']||'')):null,
+  ws.length?h('div',{class:'card'},h('div',{class:'small mute',style:'margin-bottom:6px'},'🧺 미리 알아 둘 단어 (누르면 소리)'),
+   h('div',{},ws.map(w=>h('button',{class:'tile',onclick:()=>speak(w['일본어'])},h('span',{class:'jp'},w['일본어']),h('span',{class:'small mute'},' '+w['한국어']))))):null,
+  h('div',{class:'row'},streetLink(p)),
+  h('button',{class:'btn wide',onclick:()=>startScene(id)},'🚪 들어가기')
+ ))}
+
+/* ========== 대화 진행 ========== */
+let G=null;
+const DEF_REACT='えっ？ もう いちど おねがいします。',DEF_REACT_KO='네? 다시 한번 말해 주세요.';
+function buildSeq(id){const rows=D.lines[id]||[],groups=new Map();
+ rows.forEach(r=>{const m=String(r['순서']).match(/^\s*([\d.]+)\s*(?:-\s*(.+))?$/);const n=m?parseFloat(m[1]):9999,v=m&&m[2]?m[2].trim():'';if(!groups.has(n))groups.set(n,[]);groups.get(n).push({r,v})});
+ const out=[];[...groups.keys()].sort((a,b)=>a-b).forEach(n=>{const g=groups.get(n),vs=[...new Set(g.map(x=>x.v).filter(Boolean))],pick=vs.length?vs[Math.floor(Math.random()*vs.length)]:'';g.forEach(x=>{if(!x.v||x.v===pick)out.push(x.r)})});return out}
+function startScene(id){const s=sceneById(id),p=placeById(s['장소ID']);G={s,p,c:charOf(p),seq:buildSeq(id),i:0,pts:0,max:0,miss:0,log:[],cur:null};playStep()}
+const rateFor=()=>baseRate()*(num(G.c['말속도'])||1);
+const sayNpc=t=>speak(t,rateFor());
+function face(){return G.miss===0?'😊':G.miss<3?'😅':'😵'}
+function bubbleEl(b){
+ if(b.who==='me')return h('div',{class:'bubble me'},h('div',{class:'who'},'🙋 '+(D.S['플레이어이름']||'나')),h('div',{class:'ja jp'},b.ja),h('div',{class:'tools'},h('button',{class:'mini',onclick:()=>speak(b.ja)},'🔊')));
+ const hidden=b.phone&&!b.open;
+ return h('div',{class:'bubble npc'+(b.react?' react':'')},h('div',{class:'who'},(b.phone?'📞 ':'')+G.c['이모지']+' '+G.c['이름']),
+  hidden?h('div',{class:'ja'},'📞 …… (소리만 들려요)'):h('div',{class:'ja jp'},b.ja),
+  (!hidden&&b.ko&&koShow())?h('div',{class:'ko'},b.ko):null,
+  h('div',{class:'tools'},h('button',{class:'mini',onclick:()=>sayNpc(b.ja)},b.phone?'🔊 다시 듣기':'🔊'),hidden?h('button',{class:'mini',onclick:()=>{b.open=true;render(G.ctrlFn())}},'👀 글자 보기'):null))}
+function render(ctrl){
+ const prog=G.seq.length?Math.round(G.i/G.seq.length*100):0;
+ show(h('div',{class:'wrap'},
+  h('div',{class:'top'},h('button',{class:'ib',onclick:()=>{if(confirm('홈으로 나갈까요? 이 대화는 처음부터 다시 해야 해요.'))cityView(G.p['도시ID'])}},'🏠'),
+   h('div',{class:'bar'},h('i',{style:'width:'+prog+'%'})),
+   h('button',{class:'ib',onclick:()=>{P.koShow=!koShow();saveP();render(G.ctrlFn())}},koShow()?'뜻 ON':'뜻 OFF'),h('span',{class:'face'},G.c['이모지']+face())),
+  h('div',{class:'log'},G.log.map(bubbleEl)),
+  h('div',{class:'ctrl'},ctrl)));
+ window.scrollTo(0,document.body.scrollHeight)}
+function playStep(){
+ if(G.i>=G.seq.length)return finishScene();
+ const r=G.seq[G.i];G.cur={r,tries:0};
+ if(r['누가']==='점원'){const ja=fill(r['일본어'],G.p,'ja'),ko=fill(r['한국어'],G.p,'ko');G.log.push({who:'npc',ja,ko,phone:r['형태']==='전화'});
+  G.ctrlFn=()=>h('button',{class:'btn wide',onclick:()=>{G.i++;playStep()}},'다음 ▶');render(G.ctrlFn());sayNpc(ja)}
+ else{G.ctrlFn=()=>meCtrl(r);render(G.ctrlFn())}
+}
+async function correct(jaSaid){const t=G.cur.tries;G.pts+=t===0?2:t===1?1:0;G.max+=2;G.log.push({who:'me',ja:jaSaid});G.i++;G.ctrlFn=()=>h('div',{class:'center mute'},'…');render(G.ctrlFn());await speak(jaSaid);playStep()}
+function wrong(r,react,reactKo){G.cur.tries++;G.miss++;const t=react||r['틀릴때반응']||DEF_REACT;G.log.push({who:'npc',ja:t,ko:reactKo||(t===DEF_REACT?DEF_REACT_KO:''),react:true});sayNpc(t);render(G.ctrlFn())}
+function promptEl(r){const task=r['형태']==='메뉴'||r['형태']==='돈내기';return h('div',{class:'prompt'},task?'🎯 할 일: ':'💬 이렇게 말해 봐요: ',h('b',{},fill(r['한국어'],G.p,'ko')))}
+function meCtrl(r){const ty=r['형태'];
+ if(ty==='고르기')return choiceCtrl(r);if(ty==='타일')return tileCtrl(r,fill(r['일본어'],G.p,'ja'),splitP(fill(r['보기'],G.p,'ja')));
+ if(ty==='빈칸')return blankCtrl(r);if(ty==='말하기')return speakCtrl(r);if(ty==='메뉴')return menuCtrl(r);if(ty==='돈내기')return payCtrl(r);return h('div',{},'?')}
+/* 1) 고르기 */
+function choiceCtrl(r){const c=G.cur;if(!c.opts)c.opts=shuffle(splitP(r['보기']).map(o=>fill(o,G.p,'ja')));const ans=fill(String(r['정답']).trim(),G.p,'ja');c.bad=c.bad||[];
+ return [promptEl(r),c.opts.map(o=>{const cls='opt'+(c.tries>=2&&o===ans?' ok':'')+(c.bad.includes(o)?' bad':'');
+  return h('button',{class:cls,onclick:()=>{if(o===ans)correct(o);else{if(!c.bad.includes(o))c.bad.push(o);wrong(r)}}},h('span',{class:'t jp'},o),h('span',{class:'mini',onclick:e=>{e.stopPropagation();speak(o)}},'🔊'))}),
+  c.tries>=2?h('div',{class:'small mute'},'초록색이 정답이에요. 눌러서 말해 봐요.'):null]}
+/* 2) 타일 */
+function tileCtrl(r,ja,fakes){const c=G.cur;const tokens=ja.split(/\s+/).filter(Boolean);
+ if(!c.pool){c.pool=shuffle([...tokens,...fakes].map((t,i)=>({t,i})));c.placed=[]}
+ const check=()=>{if(c.placed.length<tokens.length)return;const said=c.placed.map(x=>x.t);if(said.join(' ')===tokens.join(' '))correct(tokens.join(' '));else{c.placed=[];wrong(r)}};
+ return [promptEl(r),c.tries>=2?h('div',{class:'answer jp'},'정답: '+tokens.join(' ')):null,
+  h('div',{class:'slot'},c.placed.map(x=>h('button',{class:'tile jp',onclick:()=>{c.placed=c.placed.filter(y=>y!==x);render(G.ctrlFn())}},x.t))),
+  h('div',{},c.pool.map(x=>h('button',{class:'tile jp'+(c.placed.includes(x)?' used':''),onclick:()=>{if(c.placed.includes(x))return;c.placed.push(x);if(c.placed.length>=tokens.length)check();else render(G.ctrlFn())}},x.t))),
+  h('div',{class:'small mute'},'타일을 순서대로 눌러 문장을 만들어요. 놓은 타일을 누르면 빠져요.')]}
+/* 3) 빈칸 */
+function blankCtrl(r){const c=G.cur;const ja=fill(r['일본어'],G.p,'ja');const ans=ja.match(/\[(.+?)\]/)[1];const full=ja.replace(/\[(.+?)\]/,'$1');
+ if(!c.opts)c.opts=shuffle([...new Set([...splitP(fill(r['보기'],G.p,'ja')),ans])]);c.bad=c.bad||[];
+ return [promptEl(r),h('div',{class:'say jp'},ja.replace(/\[(.+?)\]/,c.tries>=2?'【'+ans+'】':'（　　）')),
+  h('div',{class:'row'},c.opts.map(o=>h('button',{class:'tile jp',style:c.bad.includes(o)?'opacity:.35':'',onclick:()=>{if(o===ans)correct(full);else{if(!c.bad.includes(o))c.bad.push(o);wrong(r)}}},o)))]}
+/* 4) 말하기 (음성인식) */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const SRERR={'not-allowed':'마이크 권한을 허용해 주세요 (주소창 왼쪽 자물쇠 → 마이크)','service-not-allowed':'이 브라우저에서는 음성인식을 쓸 수 없어요','no-speech':'소리가 안 들렸어요. 🎤를 누르고 바로 말해 봐요','audio-capture':'마이크를 찾을 수 없어요','network':'음성인식에 인터넷 연결이 필요해요'};
+const norm=s=>String(s||'').normalize('NFKC').replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)).replace(/[\s、。，．,.!！?？・…「」『』〜～ー\-]/g,'').toLowerCase();
+function sim(a,b){if(!a||!b)return 0;const m=a.length,n=b.length;let prev=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){const cur=[i];for(let j=1;j<=n;j++)cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));prev=cur}return 1-prev[n]/Math.max(m,n)}
+function speakCtrl(r){const c=G.cur;const ja=fill(r['일본어'],G.p,'ja');
+ if(!SR){const toks=ja.split(/\s+/).filter(Boolean);
+  if(toks.length>=2)return [h('div',{class:'small mute'},'🎤 이 브라우저는 말하기 인식이 안 돼서 타일로 바꿨어요'),tileCtrl(r,ja,[])];
+  return [promptEl(r),h('div',{class:'say jp'},ja),h('button',{class:'btn wide',onclick:()=>{c.tries=1;correct(ja)}},'따라 말했어요')]}
+ const listen=()=>{try{speechSynthesis.cancel()}catch(e){}const rec=new SR();rec.lang='ja-JP';rec.interimResults=false;rec.maxAlternatives=5;c.listening=true;render(G.ctrlFn());
+  rec.onresult=e=>{c.listening=false;const alts=[...e.results[0]].map(a=>a.transcript);const targets=[ja,...splitP(fill(r['정답'],G.p,'ja'))];let best=0,heard=alts[0]||'';
+   alts.forEach(a=>targets.forEach(t=>{const s=sim(norm(a),norm(t));if(s>best){best=s;heard=a}}));c.heard=heard;c.score=best;
+   if(best>=0.75)correct(ja);else wrong(r)};
+  rec.onerror=e=>{c.listening=false;toast(SRERR[e.error]||('음성인식 오류: '+e.error),5000);render(G.ctrlFn())};
+  rec.onend=()=>{if(c.listening){c.listening=false;render(G.ctrlFn())}};
+  try{rec.start()}catch(e){c.listening=false;toast('음성인식을 시작하지 못했어요');render(G.ctrlFn())}};
+ return [promptEl(r),h('div',{class:'say jp'},ja),
+  h('div',{class:'row'},h('button',{class:'btn sec',onclick:()=>speak(ja)},'🔊 먼저 듣기'),h('button',{class:'btn'+(c.listening?' green':''),onclick:listen,disabled:c.listening},c.listening?'👂 듣는 중… 말해 봐요':'🎤 말하기')),
+  c.heard!=null?h('div',{class:'small mute',style:'margin-top:8px'},'들린 말: ',h('span',{class:'jp'},c.heard||'(없음)'),' · 비슷한 정도 '+Math.round((c.score||0)*100)+'% (75% 넘으면 통과)'):null,
+  c.tries>=2?h('button',{class:'btn sec wide',onclick:()=>correct(ja)},'넘어가기 (연습으로 통과)'):null]}
+/* 5) 메뉴 주문 */
+function menuCtrl(r){const c=G.cur;const items=splitP(fill(r['보기'],G.p,'ja')).map(o=>{const i=o.lastIndexOf(':');return i>0?{n:o.slice(0,i).trim(),pr:num(o.slice(i+1))}:{n:o,pr:0}});const ans=splitP(fill(r['정답'],G.p,'ja'));c.sel=c.sel||[];
+ const total=items.filter(x=>c.sel.includes(x.n)).reduce((a,x)=>a+x.pr,0);
+ const order=()=>{const ok=c.sel.length===ans.length&&ans.every(a=>c.sel.includes(a));if(ok)correct(ans.join('と ')+'を おねがいします。');else{c.sel=[];wrong(r,'えっと… ごちゅうもんは それで いいですか？','음… 주문 그걸로 괜찮으세요?')}};
+ return [promptEl(r),c.tries>=2?h('div',{class:'answer jp'},'정답: '+ans.join(', ')):null,
+  h('div',{class:'menu'},h('h4',{class:'jp'},'メニュー'),items.map(x=>h('button',{class:'mi jp'+(c.sel.includes(x.n)?' on':''),onclick:()=>{c.sel=c.sel.includes(x.n)?c.sel.filter(y=>y!==x.n):[...c.sel,x.n];speak(x.n);render(G.ctrlFn())}},h('span',{},(c.sel.includes(x.n)?'✅ ':'')+x.n),h('span',{},'¥'+x.pr.toLocaleString())))),
+  h('div',{class:'row',style:'margin-top:10px'},h('span',{},'합계 ¥'+total.toLocaleString()),h('span',{class:'spacer'}),h('button',{class:'btn',disabled:!c.sel.length,onclick:order},'주문하기'))]}
+/* 6) 돈 내기 */
+function payCtrl(r){const c=G.cur;const target=num(fill(r['정답'],G.p,'ja'));c.paid=c.paid||[];const sum=c.paid.reduce((a,b)=>a+b,0);
+ const pay=()=>{if(sum===target)correct(target+'えん、ちょうどです。');else{const s=sum;c.paid=[];wrong(r,'あれ？ '+s+'えんですね。'+target+'えんです。','어? '+s+'엔이네요. '+target+'엔이에요.')}};
+ return [promptEl(r),h('div',{class:'say jp center'},target+'えん'),
+  h('div',{class:'tray'},'💴 ¥'+sum.toLocaleString()),
+  h('div',{class:'coins'},[1000,500,100,50,10,5,1].map(v=>h('button',{class:'coin c'+v,onclick:()=>{c.paid.push(v);render(G.ctrlFn())}},v+'円'))),
+  h('div',{class:'row'},h('button',{class:'btn sec',onclick:()=>{c.paid.pop();render(G.ctrlFn())}},'↩ 하나 빼기'),h('span',{class:'spacer'}),h('button',{class:'btn',disabled:!sum,onclick:pay},'내기'))]}
+
+/* ========== 미션 결과 ========== */
+function finishScene(){const id=G.s['장면ID'],p=G.p;capHit=false;
+ const ratio=G.max?G.pts/G.max:1,stars=ratio>=0.9?3:ratio>=0.6?2:1;const prev=P.scenes[id],first=!prev;
+ P.scenes[id]={best:Math.max(prev?prev.best:0,stars),clears:(prev?prev.clears:0)+1,last:today()};
+ const got=[];D.items.filter(it=>it['장면ID']===id).forEach(it=>{const k=it['아이템ID'];if(P.items[k])return;const cd=it['조건'];
+  if(cd==='클리어'||(cd==='별3'&&stars===3)||(cd==='레어'&&Math.random()<(num(it['확률'])||0.3))){P.items[k]=today();got.push(it)}});
+ const money=[];const title=fill(G.s['제목'],p,'ko');const add=(k,lb)=>{const g=award(k,rule(k).name+' · '+lb);if(g>0)money.push({label:rule(k).name,amt:g});return g};
+ if(first&&rule('새미션').on){P.flags.newm[id]=1;add('새미션',title)}
+ if(first&&isBoss(G.s)&&rule('보스전').on){P.flags.boss[id]=1;add('보스전',title)}
+ if(stars===3&&!P.flags.star3[id]&&rule('별3').on){P.flags.star3[id]=1;add('별3',title)}
+ const pid=G.s['장소ID'],ps=scenesOf(pid);if(rule('장소완주').on&&!P.flags.pack[pid]&&ps.length&&ps.every(x=>(P.scenes[x['장면ID']]||{}).best===3)){P.flags.pack[pid]=1;add('장소완주',pName(p))}
+ markPlayDay(money);saveP();
+ const next=ps.find(x=>!cleared(x['장면ID'])&&!bossLocked(x));
+ show(h('div',{class:'wrap'},
+  h('div',{class:'card center'},h('div',{style:'font-size:44px'},G.c['이모지']),h('div',{class:'big-stars'},starStr(stars)),
+   h('div',{style:'font-size:22px;margin:6px 0'},stars===3?'완벽해요! 진짜 일본에서도 통하겠어요!':stars===2?'잘했어요! 한 번 더 하면 별 3개!':'미션 성공! 다시 하면 더 잘할 수 있어요'),
+   h('div',{class:'mute small'},fill(G.s['제목'],p,'ko')+' · 점수 '+G.pts+'/'+G.max)),
+  (first||got.length||money.length)?h('div',{class:'card'},
+   first?h('div',{class:'reward'},h('span',{class:'e'},G.s['도장']||'🛂'),h('span',{},'여권 도장 획득!')):null,
+   got.map(it=>h('div',{class:'reward'},h('span',{class:'e'},it['이모지']),h('span',{},(it['조건']==='레어'?'✨레어 ':'')+it['이름']+' 획득!'))),
+   money.map(m=>h('div',{class:'reward'},h('span',{class:'e'},'💰'),h('span',{},m.label+' +'+won(m.amt)))),
+   capHit?h('div',{class:'small mute'},'이번 주 최대 적립 금액에 도달했어요'):null,
+   money.length?h('div',{class:'small mute',style:'margin-top:6px'},'이번 달 적립 '+won(monthSum(monthKey()))+' · 월초에 아빠랑 정산해요'):null):null,
+  h('button',{class:'btn sec wide',onclick:()=>startScene(id)},'🔁 다시 하기'),
+  next?h('button',{class:'btn wide',onclick:()=>introView(next['장면ID'])},'▶ 다음 미션: '+fill(next['제목'],p,'ko')):null,
+  h('button',{class:'btn blue wide',onclick:()=>cityView(p['도시ID'])},'🗾 '+(D.cities.find(c=>c['도시ID']===p['도시ID'])||{})['이름']+'로 돌아가기')
+ ))}
+
+/* ========== 복습: 단어 퀴즈 ========== */
+let RV=null;
+function reviewStart(){const ids=Object.keys(P.scenes).filter(id=>D.words[id]);const pool=ids.flatMap(id=>D.words[id]);const all=Object.values(D.words).flat();
+ if(pool.length<4){show(h('div',{class:'wrap'},h('div',{class:'card center'},h('div',{style:'font-size:44px'},'📖'),h('p',{},'미션을 하나 깨면 그 미션의 단어로 복습할 수 있어요!'),h('button',{class:'btn',onclick:homeView},'미션 하러 가기'))),'review');return}
+ const uniq=[...new Map(pool.map(w=>[w['일본어'],w])).values()];
+ const scored=shuffle(uniq).sort((a,b)=>((P.words[b['일본어']]||{}).w||0)-((P.words[a['일본어']]||{}).w||0));
+ RV={qs:scored.slice(0,10),i:0,ok:0,all:[...new Map(all.map(w=>[w['일본어'],w])).values()]};reviewQ()}
+function reviewQ(){if(RV.i>=RV.qs.length)return reviewEnd();const w=RV.qs[RV.i];
+ if(!w.opts){const wrongs=sample(RV.all.filter(x=>x['한국어']!==w['한국어']),3).map(x=>x['한국어']);w.opts=shuffle([w['한국어'],...wrongs])}
+ let answered=false;
+ const pick=(o,btn)=>{if(answered)return;answered=true;const ok=o===w['한국어'];const st=P.words[w['일본어']]=P.words[w['일본어']]||{w:0,c:0};
+  if(ok){RV.ok++;st.c++;btn.classList.add('ok')}else{st.w++;btn.classList.add('bad');[...document.querySelectorAll('.opt')].forEach(b=>{if(b.dataset.o===w['한국어'])b.classList.add('ok')})}
+  saveP();setTimeout(()=>{RV.i++;reviewQ()},ok?700:1500)};
+ show(h('div',{class:'wrap'},
+  h('div',{class:'top'},h('button',{class:'ib',onclick:homeView},'🏠'),h('div',{class:'bar'},h('i',{style:'width:'+Math.round(RV.i/RV.qs.length*100)+'%'})),h('span',{},(RV.i+1)+'/'+RV.qs.length)),
+  h('div',{class:'card center'},h('div',{class:'jp',style:'font-size:34px;margin:10px 0'},w['일본어']),h('button',{class:'mini',onclick:()=>speak(w['일본어'])},'🔊 듣기')),
+  w.opts.map(o=>{const b=h('button',{class:'opt','data-o':o,onclick:()=>pick(o,b)},h('span',{class:'t'},o));return b})
+ ),'review');speak(w['일본어'])}
+function reviewEnd(){const money=[];capHit=false;if(RV.qs.length>=5)markPlayDay(money);saveP();
+ show(h('div',{class:'wrap'},h('div',{class:'card center'},h('div',{style:'font-size:44px'},'📖'),h('div',{style:'font-size:24px'},RV.qs.length+'개 중 '+RV.ok+'개 정답!'),
+  money.map(m=>h('div',{class:'reward'},h('span',{class:'e'},'💰'),h('span',{},m.label+' +'+won(m.amt)))),
+  h('button',{class:'btn wide',onclick:reviewStart},'한 번 더'),h('button',{class:'btn sec wide',onclick:homeView},'도시로'))),'review')}
+
+/* ========== 여권과 도감 ========== */
+function passportView(){const allItems=D.items;const owned=allItems.filter(it=>P.items[it['아이템ID']]).length;
+ show(h('div',{class:'wrap'},h('div',{class:'sec-title'},'🛂 '+(D.S['플레이어이름']||'')+'의 여권'),
+  D.cities.map(c=>{const ss=placesOf(c['도시ID']).flatMap(p=>scenesOf(p['장소ID']).map(s=>({s,p})));if(!ss.length)return null;
+   return h('div',{class:'card'},h('div',{style:'margin-bottom:8px'},c['이모지']+' '+c['이름']),h('div',{class:'stamp-grid'},ss.map(({s,p})=>{const b=(P.scenes[s['장면ID']]||{}).best||0;
+    return h('div',{class:'stamp'+(b?'':' off')},h('span',{class:'e'},s['도장']||'🛂'),fill(s['제목'],p,'ko'),h('div',{style:'color:var(--gold)'},b?starStr(b):''))})))}),
+  h('div',{class:'sec-title'},'🎒 수집 도감 '+owned+'/'+allItems.length),
+  h('div',{class:'card'},h('div',{class:'item-grid'},allItems.map(it=>P.items[it['아이템ID']]?h('div',{class:'item'},h('span',{class:'e'},it['이모지']),it['이름']):h('div',{class:'item',style:'opacity:.5'},h('span',{class:'e'},'❔'),it['조건']==='레어'?'레어':'???'))))
+ ),'passport')}
+
+/* ========== 용돈 ========== */
+function moneyView(){const cm=monthKey();const months=[...new Set(P.ledger.filter(e=>!e.paid).map(e=>e.m))].sort();const waiting=months.filter(m=>m<cm);
+ const cr=rule('주상한');const paidTotal=P.ledger.filter(e=>e.paid).reduce((a,e)=>a+e.amt,0);
+ const rules=Object.values(D.rules).filter(r=>r.on&&r.key!=='주상한'&&r.key!=='주간개근일수');
+ show(h('div',{class:'wrap'},h('div',{class:'sec-title'},'💰 용돈 통장'),
+  h('div',{class:'card center'},h('div',{class:'small mute'},monthLabel(cm)+' 적립 중'),h('div',{class:'money-big'},won(monthSum(cm))),
+   h('div',{class:'small mute'},'이번 주 '+won(weekSum())+(cr.on?' / 최대 '+won(cr.amt):'')+' · 받은 용돈 합계 '+won(paidTotal))),
+  waiting.length?h('div',{class:'card'},h('div',{style:'margin-bottom:6px'},'📅 정산 기다리는 중'),waiting.map(m=>h('div',{class:'lg'},h('span',{},monthLabel(m)),h('b',{},won(monthSum(m))))),h('div',{class:'small mute'},'아빠 확인 1분 시험을 통과하면 받아요')):null,
+  h('div',{class:'card'},h('div',{style:'margin-bottom:6px'},'📜 용돈 규칙'),rules.map(r=>h('div',{class:'lg'},h('span',{},r.name,h('div',{class:'small mute'},r.desc.replace('주간개근일수',(num(rule('주간개근일수').amt)||4)+'일'))),h('b',{},'+'+won(r.amt)))),
+   h('div',{class:'small mute',style:'margin-top:6px'},'같은 미션을 반복하면 용돈은 없어요. 매월 초에 지난달 적립금을 정산해요.')),
+  h('div',{class:'card'},h('div',{style:'margin-bottom:6px'},'🧾 최근 기록'),P.ledger.length?P.ledger.slice(-15).reverse().map(e=>h('div',{class:'lg'},h('span',{},h('span',{class:'small mute'},e.d.slice(5)+' '),e.label),h('span',{},'+'+won(e.amt)+(e.paid?' ✅':'')))):h('div',{class:'small mute'},'아직 기록이 없어요. 미션을 깨 봐요!'))
+ ),'money')}
+
+/* ========== 아빠 모드 ========== */
+let dadOK=false;
+const hashPin=p=>{let x=5381;for(const ch of 'kt:'+p)x=((x<<5)+x+ch.charCodeAt(0))>>>0;return x.toString(36)};
+function dadGate(){if(dadOK)return dadView();const first=!P.pin;const inp=h('input',{class:'pin',type:'password',inputmode:'numeric',maxlength:'4',placeholder:'••••'});
+ const go=()=>{const v=inp.value.trim();if(!/^\d{4}$/.test(v))return toast('숫자 4자리를 넣어 주세요');if(first){P.pin=hashPin(v);saveP();dadOK=true;toast('아빠 비밀번호를 만들었어요');dadView()}else if(hashPin(v)===P.pin){dadOK=true;dadView()}else{inp.value='';toast('비밀번호가 달라요')}};
+ inp.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+ show(h('div',{class:'wrap'},h('div',{class:'card center'},h('div',{style:'font-size:40px'},'⚙️'),h('div',{style:'font-size:20px;margin-bottom:6px'},first?'아빠 비밀번호 만들기':'아빠 모드'),
+  h('div',{class:'small mute',style:'margin-bottom:10px'},first?'정산할 때 쓸 숫자 4자리를 정해 주세요':'비밀번호 4자리'),inp,h('button',{class:'btn wide',onclick:go},'확인'))),'dad');setTimeout(()=>inp.focus(),100)}
+function dadView(){const cm=monthKey();const months=[...new Set(P.ledger.filter(e=>!e.paid).map(e=>e.m))].sort();
+ const exp=h('textarea',{readonly:true,style:'display:none'});const imp=h('textarea',{placeholder:'백업 코드를 붙여넣고 가져오기',style:'display:none'});
+ show(h('div',{class:'wrap'},h('div',{class:'sec-title'},'⚙️ 아빠 모드'),
+  h('div',{class:'card'},h('div',{style:'margin-bottom:6px'},'💸 월초 정산'),
+   months.length?months.map(m=>h('div',{class:'lg'},h('span',{},monthLabel(m)+(m===cm?' (진행 중)':'')),h('span',{},h('b',{},won(monthSum(m))+' '),h('button',{class:'mini',onclick:()=>testStart(m)},'확인 시험 후 정산')))):h('div',{class:'small mute'},'정산할 적립금이 없어요'),
+   (P.payouts||[]).length?h('div',{style:'margin-top:8px'},h('div',{class:'small mute'},'지급 내역'),P.payouts.slice(-6).reverse().map(x=>h('div',{class:'lg small'},h('span',{},monthLabel(x.m)+' · 시험 '+x.test),h('span',{},won(x.amt)+' · '+x.d)))):null),
+  h('div',{class:'card'},h('div',{style:'margin-bottom:6px'},'📊 데이터 상태'),
+   h('div',{class:'lg small'},h('span',{},'불러온 곳'),h('b',{},D.src)),h('div',{class:'lg small'},h('span',{},'가게 이름 모드'),h('b',{},realMode()?'실제 이름':'가상 이름')),
+   h('div',{class:'lg small'},h('span',{},'도시/장소/미션'),h('b',{},D.cities.length+' / '+D.places.length+' / '+D.scenes.filter(s=>D.lines[s['장면ID']]).length)),
+   D.warn.length?D.warn.map(w=>h('div',{class:'warn'},'⚠️ '+w)):h('div',{class:'small mute'},'✅ 시트에 문제 없음'),
+   h('button',{class:'btn sec wide',onclick:async()=>{toast('시트를 다시 불러와요…');D=await loadData();dadView();toast('불러오기 끝: '+D.src)}},'🔄 시트 다시 불러오기'),
+   h('div',{class:'small mute',style:'margin-top:8px'},'장소·대화 추가는 구글 시트에서 하면 돼요. 저장 후 몇 분 뒤 앱을 다시 열면 반영돼요.')),
+  h('div',{class:'card'},h('div',{style:'margin-bottom:6px'},'💾 진도 백업'),h('div',{class:'small mute'},'폰을 바꾸거나 브라우저 기록을 지우기 전에 백업 코드를 복사해 두세요.'),
+   h('div',{class:'row',style:'margin-top:8px'},h('button',{class:'btn sec',onclick:()=>{exp.style.display='block';exp.value=btoa(unescape(encodeURIComponent(JSON.stringify(P))));exp.select();try{navigator.clipboard.writeText(exp.value);toast('백업 코드를 복사했어요')}catch(e){}}},'내보내기'),
+    h('button',{class:'btn sec',onclick:()=>{if(imp.style.display==='none'){imp.style.display='block';return}try{const o=JSON.parse(decodeURIComponent(escape(atob(imp.value.trim()))));if(!o.scenes)throw 0;if(!confirm('지금 진도를 백업 코드 내용으로 바꿀까요?'))return;P=Object.assign(blankP(),o);saveP();toast('가져왔어요');dadView()}catch(e){toast('백업 코드가 올바르지 않아요')}}},'가져오기')),exp,imp),
+  h('div',{class:'card'},h('div',{class:'row'},h('button',{class:'btn sec',onclick:()=>{speak('こんにちは');toast('소리 테스트 중…')}},'🔊 소리 테스트'),
+   h('button',{class:'btn sec',onclick:()=>{P.pin=null;saveP();dadOK=false;toast('새 비밀번호를 정해 주세요');dadGate()}},'🔑 비밀번호 바꾸기'),
+   h('button',{class:'btn sec',onclick:()=>{dadOK=false;homeView()}},'🔒 잠그기')))
+ ),'dad')}
+function testPool(){const ids=Object.keys(P.scenes).filter(id=>D.lines[id]);const src=ids.length?ids:D.scenes.map(s=>s['장면ID']);const out=[];
+ src.forEach(id=>{const s=sceneById(id);if(!s)return;const p=placeById(s['장소ID']);(D.lines[id]||[]).forEach(r=>{if(r['누가']!=='나')return;let ja='';const ty=r['형태'];
+  if(ty==='고르기')ja=r['정답'];else if(ty==='타일'||ty==='말하기')ja=r['일본어'];else if(ty==='빈칸')ja=String(r['일본어']).replace(/\[(.+?)\]/,'$1');if(ja)out.push({ja:fill(ja,p,'ja'),ko:fill(r['한국어'],p,'ko')})})});return out}
+let TS=null;
+function testStart(m){const n=Math.max(1,num(D.S['확인시험문장수'])||3);TS={m,qs:sample(testPool(),n),i:0,pass:0,open:false};testQ()}
+function testQ(){if(TS.i>=TS.qs.length)return testEnd();const q=TS.qs[TS.i];
+ const mark=ok=>{if(ok)TS.pass++;TS.i++;TS.open=false;testQ()};
+ show(h('div',{class:'wrap'},h('div',{class:'top'},h('button',{class:'ib',onclick:dadView},'←'),h('b',{},'아빠 확인 시험 '+(TS.i+1)+'/'+TS.qs.length)),
+  h('div',{class:'card center'},h('div',{class:'small mute'},'아빠가 한국어로 읽어 주면, 주원이가 일본어로 말해요'),h('div',{style:'font-size:26px;margin:14px 0'},q.ko),
+   TS.open?h('div',{},h('div',{class:'jp',style:'font-size:22px;margin:8px 0;color:var(--green)'},q.ja),h('button',{class:'mini',onclick:()=>speak(q.ja)},'🔊 발음 듣기')):h('button',{class:'btn sec',onclick:()=>{TS.open=true;testQ()}},'👀 정답 보기')),
+  h('div',{class:'row'},h('button',{class:'btn green',style:'flex:1',onclick:()=>mark(true)},'⭕ 맞았어요'),h('button',{class:'btn sec',style:'flex:1',onclick:()=>mark(false)},'❌ 아쉬워요'))
+ ))}
+function testEnd(){const m=TS.m,amt=monthSum(m);
+ show(h('div',{class:'wrap'},h('div',{class:'card center'},h('div',{style:'font-size:44px'},TS.pass===TS.qs.length?'🎉':'💪'),h('div',{style:'font-size:22px'},TS.qs.length+'문제 중 '+TS.pass+'개 통과'),
+  h('div',{class:'small mute',style:'margin:6px 0 10px'},monthLabel(m)+' 적립금 '+won(amt)),
+  h('button',{class:'btn green wide',onclick:()=>{if(!confirm(monthLabel(m)+' 용돈 '+won(amt)+'을 지급 완료로 처리할까요?'))return;const d=today();P.ledger.forEach(e=>{if(e.m===m&&!e.paid)e.paid=d});P.payouts.push({m,amt,d,test:TS.pass+'/'+TS.qs.length});saveP();toast('지급 완료로 기록했어요');dadView()}},'💸 지급 완료로 처리'),
+  h('button',{class:'btn sec wide',onclick:()=>testStart(m)},'🔁 시험 다시 보기'),h('button',{class:'btn sec wide',onclick:dadView},'다음에 하기'))),'dad')}
+
+/* ========== 시작 ========== */
+(async()=>{try{D=await loadData();homeView()}catch(e){app.replaceChildren(h('div',{class:'wrap'},h('div',{class:'card'},'앱을 여는 중 문제가 생겼어요: '+e.message)))}})();
+</script>
+</body>
+</html>
