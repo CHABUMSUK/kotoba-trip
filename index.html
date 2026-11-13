@@ -111,6 +111,7 @@ input,textarea{font-family:inherit;font-size:17px}
 .pin{letter-spacing:10px;text-align:center;font-size:26px;width:180px;padding:8px;border:2px solid var(--line);border-radius:12px}
 textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:12px;padding:8px;font-size:12px}
 .face{font-size:26px}
+.install{background:#fff;border:2px dashed var(--pri);border-radius:16px;padding:12px 14px;margin-bottom:12px;font-size:16px;display:flex;flex-direction:column;gap:8px}
 </style>
 </head>
 <body>
@@ -137,6 +138,23 @@ const monthLabel=m=>m.slice(0,4)+'년 '+Number(m.slice(5,7))+'월';
 let toastT=null;
 function toast(m,ms){let el=document.getElementById('toast');if(!el){el=document.createElement('div');el.id='toast';el.style.cssText='position:fixed;left:50%;bottom:86px;transform:translateX(-50%);max-width:90%;background:#000c;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:9;text-align:center';document.body.append(el)}el.textContent=m;el.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>{el.style.display='none'},ms||3000)}
 function show(node,nav){app.replaceChildren(node);if(nav)app.append(navBar(nav));window.scrollTo(0,0)}
+
+/* ========== 설치 (홈 화면 아이콘) ========== */
+const UA=navigator.userAgent||'';
+const isIOS=/iPhone|iPad|iPod/i.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const isAndroid=/Android/i.test(UA);
+const isStandalone=()=>(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+if(/KAKAOTALK/i.test(UA)){const u=location.href;if(isIOS)location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);else if(isAndroid)location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end'}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(D&&document.querySelector('.hero'))homeView()});
+window.addEventListener('appinstalled',()=>{deferredPrompt=null;toast('설치 완료! 이제 홈 화면의 주원 TRIP 아이콘으로 열어요',5000);if(D&&document.querySelector('.hero'))homeView()});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})});
+function installBar(){let hid=false;try{hid=sessionStorage.getItem('hideInstall')==='1'}catch(e){}if(isStandalone()||hid)return null;
+ const close=h('button',{class:'mini',onclick:()=>{try{sessionStorage.setItem('hideInstall','1')}catch(e){}homeView()}},'닫기');
+ if(deferredPrompt)return h('div',{class:'install'},h('div',{},'📲 앱으로 설치하면 아이콘만 눌러서 바로 열려요'),h('div',{class:'row'},h('button',{class:'btn green',onclick:async()=>{const p=deferredPrompt;deferredPrompt=null;p.prompt();try{await p.userChoice}catch(e){}homeView()}},'설치하기'),h('span',{class:'spacer'}),close));
+ if(isIOS)return h('div',{class:'install'},h('div',{},'📲 홈 화면에 아이콘 만들기 (처음 한 번만)'),h('div',{},'사파리 아래쪽 공유 버튼 ',h('b',{},'⬆️'),' → ',h('b',{},'홈 화면에 추가'),' → ',h('b',{},'추가')),h('div',{class:'small mute'},'공유 버튼이 안 보이면 오른쪽 아래 … → 공유. 다음부터는 아이콘만 누르면 돼요.'),h('div',{class:'row end'},close));
+ if(isAndroid)return h('div',{class:'install'},h('div',{},'📲 크롬 오른쪽 위 ⋮ → "앱 설치" (또는 "홈 화면에 추가")'),h('div',{class:'row end'},close));
+ return null}
 
 /* ========== 소리 (브라우저 음성합성) ========== */
 let JV=null;
@@ -249,6 +267,7 @@ function homeView(){
  const total=D.scenes.filter(s=>D.lines[s['장면ID']]).length,done=Object.keys(P.scenes).filter(id=>sceneById(id)).length;
  const need=num(rule('주간개근일수').amt)||4;
  show(h('div',{class:'wrap'},
+  installBar(),
   h('div',{class:'hero'},h('h1',{},'✈️ '+(S['앱이름']||'주원이의 일본 TRIP')),h('p',{},S['부제']||''),
    h('div',{class:'chips'},h('span',{class:'chip'},'🛂 도장 '+done+'/'+total),h('span',{class:'chip'},'💰 이번 달 '+won(monthSum(monthKey()))),h('span',{class:'chip'},'🔥 이번 주 '+weekDays()+'/'+need+'일'))),
   h('div',{class:'sec-title'},'어느 도시로 떠나 볼까?'),
